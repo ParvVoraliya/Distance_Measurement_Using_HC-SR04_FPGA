@@ -1,35 +1,45 @@
-# FPGA Distance Measurement using HC-SR04 (Verilog)
+# Ultrasonic Distance Measurement using HC-SR04 (Verilog FSM)
 
-## Overview
-This project implements a **distance measurement system using the HC-SR04 ultrasonic sensor interfaced with an FPGA**. The design is written in **Verilog HDL** and measures the distance of an object by calculating the time taken for an ultrasonic wave to travel to the object and return.
+## Description
+This project implements an **ultrasonic distance measurement system using the HC-SR04 sensor in simulation**.  
+The design is written in **Verilog HDL** and uses a **Finite State Machine (FSM)** to control the trigger signal, monitor the echo response, and calculate the distance of an object from the sensor.
+
+The controller generates the required trigger pulse, measures the duration of the echo signal, and computes the distance in **millimeters**. It also indicates whether an obstacle is detected within a specific range.
+
+---
+
+## Module Interface
+
+| Signal | Type | Description |
+|------|------|-------------|
+| `clk_50M` | Input | 50 MHz clock signal |
+| `reset` | Input | Reset signal for the module |
+| `echo` | Input | Echo signal returned from the ultrasonic sensor |
+| `trig` | Output | Trigger signal sent to the ultrasonic sensor |
+| `obstacle` | Output | Indicates obstacle detection (HIGH when object < 70 mm) |
+| `distance_out` | Output | Measured distance in millimeters (8-bit output) |
+
+---
 
 ## Working Principle
-1. The FPGA generates a **10 µs trigger pulse** for the HC-SR04 sensor.
-2. The sensor emits ultrasonic waves toward the object.
-3. The waves reflect from the object and return to the sensor.
-4. The **Echo pin stays HIGH for the round-trip travel time**.
-5. The FPGA measures this pulse width using a clock-based counter.
-6. The measured time is used to estimate the distance.
 
-Distance is calculated using:
+To operate the **HC-SR04 ultrasonic sensor**, the controller follows these timing steps:
 
-Distance = (Time × Speed of Sound) / 2
+1. Start with an **initial delay of 1 µs** to allow the sensor to stabilize.
+2. Set the **TRIG signal HIGH for 10 µs** to transmit ultrasonic waves.
+3. After triggering, monitor the **ECHO signal**.
+4. When **ECHO becomes HIGH**, the sensor has detected the returning wave.
+5. Measure the duration of the **ECHO pulse**.
+6. When **ECHO goes LOW**, calculate the **distance in millimeters** based on the measured time.
+7. The **TRIG signal must remain LOW** while the echo pulse is being measured.
+8. Wait **12 ms before sending the next trigger pulse**.
 
-## Features
-- Implemented using **Verilog HDL**
-- **Trigger pulse generation** for HC-SR04
-- **Echo signal measurement**
-- **Clock cycle counting for time calculation**
-- Suitable for **FPGA-based sensor interfacing projects**
+This timing sequence is implemented using a **Finite State Machine (FSM)** to ensure correct operation.
 
-## Hardware Requirements
-- FPGA development board
-- HC-SR04 Ultrasonic Sensor
-- Jumper wires
-- Power supply
+---
 
-## Applications
-- Obstacle detection
-- Robotics navigation
-- Smart parking systems
-- Distance measurement systems
+## Simulation Procedure
+
+1. Download the **t1b_ultrasonic Quartus project**.
+2. Extract the zip file.
+3. Open the project by double-clicking:
