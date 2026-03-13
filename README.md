@@ -38,8 +38,4 @@ This timing sequence is implemented using a **Finite State Machine (FSM)** to en
 
 ---
 
-## Simulation Procedure
-
-1. Download the **t1b_ultrasonic Quartus project**.
-2. Extract the zip file.
-3. Open the project by double-clicking:
+## Simulation
