@@ -39,3 +39,4 @@ This timing sequence is implemented using a **Finite State Machine (FSM)** to en
 ---
 
 ## Simulation
+![Simulation Waveform](simulation.png)
